@@ -28,11 +28,12 @@ import com.google.android.material.card.MaterialCardView
 import com.google.android.material.chip.Chip
 import com.google.android.material.textfield.TextInputLayout
 import com.topjohnwu.magisk.R
-import com.topjohnwu.magisk.di.ServiceLocator
 import com.topjohnwu.magisk.ktx.coroutineScope
+import com.topjohnwu.magisk.ktx.get
 import com.topjohnwu.magisk.ktx.replaceRandomWithSpecial
 import com.topjohnwu.superuser.internal.UiThreadHandler
 import com.topjohnwu.widget.IndeterminateCheckBox
+import io.noties.markwon.Markwon
 import kotlinx.coroutines.*
 import kotlin.math.roundToInt
 
@@ -59,7 +60,8 @@ fun setInvisibleUnless(view: View, invisibleUnless: Boolean) {
 @BindingAdapter("markdownText")
 fun setMarkdownText(tv: TextView, text: CharSequence) {
     tv.coroutineScope.launch(Dispatchers.IO) {
-        ServiceLocator.markwon.setMarkdown(tv, text.toString())
+        val markwon = get<Markwon>()
+        markwon.setMarkdown(tv, text.toString())
     }
 }
 

@@ -4,7 +4,8 @@ import android.os.Parcelable
 import androidx.room.Entity
 import androidx.room.PrimaryKey
 import com.topjohnwu.magisk.core.model.ModuleJson
-import com.topjohnwu.magisk.di.ServiceLocator
+import com.topjohnwu.magisk.data.repository.NetworkService
+import com.topjohnwu.magisk.ktx.get
 import com.topjohnwu.magisk.ktx.legalFilename
 import kotlinx.parcelize.Parcelize
 import java.text.DateFormat
@@ -25,7 +26,7 @@ data class OnlineModule(
     val notes_url: String
 ) : Module(), Parcelable {
 
-    private val svc get() = ServiceLocator.networkService
+    private val svc: NetworkService get() = get()
 
     constructor(info: ModuleJson) : this(
         id = info.id,

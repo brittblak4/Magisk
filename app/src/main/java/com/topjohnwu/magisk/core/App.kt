@@ -13,9 +13,11 @@ import com.topjohnwu.magisk.core.utils.AppShellInit
 import com.topjohnwu.magisk.core.utils.BusyBoxInit
 import com.topjohnwu.magisk.core.utils.IODispatcherExecutor
 import com.topjohnwu.magisk.core.utils.updateConfig
-import com.topjohnwu.magisk.di.ServiceLocator
+import com.topjohnwu.magisk.di.koinModules
 import com.topjohnwu.magisk.ktx.unwrap
 import com.topjohnwu.superuser.Shell
+import org.koin.android.ext.koin.androidContext
+import org.koin.core.context.startKoin
 import timber.log.Timber
 import java.io.File
 import kotlin.system.exitProcess
@@ -62,7 +64,11 @@ open class App() : Application() {
         }.getOrNull() ?: info.nativeLibraryDir
         Const.NATIVE_LIB_DIR = File(libDir)
 
-        ServiceLocator.context = wrapped
+        // Normal startup
+        startKoin {
+            androidContext(wrapped)
+            modules(koinModules)
+        }
         AssetHack.init(impl)
         app.registerActivityLifecycleCallbacks(ForegroundTracker)
         WorkManager.initialize(impl.wrapJob(), androidx.work.Configuration.Builder().build())

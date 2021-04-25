@@ -11,9 +11,10 @@ import com.topjohnwu.magisk.R
 import com.topjohnwu.magisk.arch.ContextExecutor
 import com.topjohnwu.magisk.arch.ViewEventWithScope
 import com.topjohnwu.magisk.core.Const
-import com.topjohnwu.magisk.di.ServiceLocator
+import com.topjohnwu.magisk.data.repository.NetworkService
 import com.topjohnwu.magisk.ktx.createClassLoader
 import com.topjohnwu.magisk.ktx.reflectField
+import com.topjohnwu.magisk.ktx.inject
 import com.topjohnwu.magisk.ktx.writeTo
 import com.topjohnwu.magisk.view.MagiskDialog
 import com.topjohnwu.signing.CryptoUtils
@@ -26,6 +27,7 @@ import kotlinx.coroutines.withContext
 import org.bouncycastle.asn1.ASN1Encoding
 import org.bouncycastle.asn1.ASN1Primitive
 import org.bouncycastle.est.jcajce.JsseDefaultHostnameAuthorizer
+import org.koin.core.component.KoinComponent
 import timber.log.Timber
 import java.io.ByteArrayInputStream
 import java.io.File
@@ -38,9 +40,9 @@ import java.security.cert.X509Certificate
 
 class CheckSafetyNetEvent(
     private val callback: (SafetyNetResult) -> Unit = {}
-) : ViewEventWithScope(), ContextExecutor, SafetyNetHelper.Callback {
+) : ViewEventWithScope(), ContextExecutor, KoinComponent, SafetyNetHelper.Callback {
 
-    private val svc get() = ServiceLocator.networkService
+    private val svc by inject<NetworkService>()
 
     private lateinit var apk: File
     private lateinit var dex: File

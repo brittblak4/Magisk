@@ -26,7 +26,7 @@ import com.topjohnwu.superuser.Shell
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
-class FlashViewModel : BaseViewModel() {
+class FlashViewModel(var args: FlashFragmentArgs) : BaseViewModel() {
 
     @get:Bindable
     var showReboot = Shell.rootAccess()
@@ -38,7 +38,6 @@ class FlashViewModel : BaseViewModel() {
     val adapter = RvBindingAdapter<ConsoleItem>()
     val items = diffListOf<ConsoleItem>()
     val itemBinding = itemBindingOf<ConsoleItem>()
-    lateinit var args: FlashFragmentArgs
 
     private val logItems = mutableListOf<String>().synchronized()
     private val outItems = object : CallbackList<String>() {

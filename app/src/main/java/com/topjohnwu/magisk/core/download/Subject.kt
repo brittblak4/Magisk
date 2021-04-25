@@ -1,5 +1,6 @@
 package com.topjohnwu.magisk.core.download
 
+import android.content.Context
 import android.net.Uri
 import android.os.Parcelable
 import androidx.core.net.toUri
@@ -8,12 +9,12 @@ import com.topjohnwu.magisk.core.model.MagiskJson
 import com.topjohnwu.magisk.core.model.StubJson
 import com.topjohnwu.magisk.core.model.module.OnlineModule
 import com.topjohnwu.magisk.core.utils.MediaStoreUtils
-import com.topjohnwu.magisk.di.AppContext
 import com.topjohnwu.magisk.ktx.cachedFile
+import com.topjohnwu.magisk.ktx.get
 import kotlinx.parcelize.IgnoredOnParcel
 import kotlinx.parcelize.Parcelize
 
-private fun cachedFile(name: String) = AppContext.cachedFile(name).apply { delete() }.toUri()
+private fun cachedFile(name: String) = get<Context>().cachedFile(name).apply { delete() }.toUri()
 
 sealed class Subject : Parcelable {
 

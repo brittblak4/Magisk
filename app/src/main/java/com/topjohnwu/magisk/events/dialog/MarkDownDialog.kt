@@ -6,15 +6,19 @@ import androidx.annotation.CallSuper
 import androidx.lifecycle.lifecycleScope
 import com.topjohnwu.magisk.R
 import com.topjohnwu.magisk.core.base.BaseActivity
-import com.topjohnwu.magisk.di.ServiceLocator
+import com.topjohnwu.magisk.ktx.inject
 import com.topjohnwu.magisk.view.MagiskDialog
+import io.noties.markwon.Markwon
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import org.koin.core.component.KoinComponent
 import timber.log.Timber
 import kotlin.coroutines.cancellation.CancellationException
 
-abstract class MarkDownDialog : DialogEvent() {
+abstract class MarkDownDialog : DialogEvent(), KoinComponent {
+
+    private val markwon: Markwon by inject()
 
     abstract suspend fun getMarkdownText(): String
 
@@ -27,7 +31,7 @@ abstract class MarkDownDialog : DialogEvent() {
                 val tv = view.findViewById<TextView>(R.id.md_txt)
                 withContext(Dispatchers.IO) {
                     try {
-                        ServiceLocator.markwon.setMarkdown(tv, getMarkdownText())
+                        markwon.setMarkdown(tv, getMarkdownText())
                     } catch (e: Exception) {
                         if (e is CancellationException)
                             throw e

@@ -60,6 +60,8 @@ import java.io.File
 import java.lang.reflect.Method
 import java.lang.reflect.Array as JArray
 
+val packageName: String get() = get<Context>().packageName
+
 private lateinit var osSymlink: Method
 private lateinit var os: Any
 

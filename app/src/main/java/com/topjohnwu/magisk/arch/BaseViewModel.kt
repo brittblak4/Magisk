@@ -19,10 +19,11 @@ import com.topjohnwu.magisk.events.*
 import com.topjohnwu.magisk.utils.ObservableHost
 import com.topjohnwu.magisk.utils.set
 import kotlinx.coroutines.Job
+import org.koin.core.component.KoinComponent
 
 abstract class BaseViewModel(
     initialState: State = State.LOADING
-) : ViewModel(), ObservableHost {
+) : ViewModel(), ObservableHost, KoinComponent {
 
     override var callbacks: PropertyChangeRegistry? = null
 

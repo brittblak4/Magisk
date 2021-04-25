@@ -1,7 +1,9 @@
 package com.topjohnwu.magisk.core.utils
 
+import android.content.ContentResolver
 import android.content.ContentUris
 import android.content.ContentValues
+import android.content.Context
 import android.net.Uri
 import android.os.Build
 import android.os.Environment
@@ -11,7 +13,7 @@ import androidx.annotation.RequiresApi
 import androidx.core.net.toFile
 import androidx.core.net.toUri
 import com.topjohnwu.magisk.core.Config
-import com.topjohnwu.magisk.di.AppContext
+import com.topjohnwu.magisk.ktx.get
 import java.io.File
 import java.io.FileNotFoundException
 import java.io.IOException
@@ -22,7 +24,7 @@ import kotlin.experimental.and
 @Suppress("DEPRECATION")
 object MediaStoreUtils {
 
-    private val cr get() = AppContext.contentResolver
+    private val cr: ContentResolver by lazy { get<Context>().contentResolver }
 
     @get:RequiresApi(api = 29)
     private val tableUri

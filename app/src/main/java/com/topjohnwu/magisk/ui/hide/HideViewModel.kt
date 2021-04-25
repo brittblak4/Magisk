@@ -2,6 +2,7 @@ package com.topjohnwu.magisk.ui.hide
 
 import android.annotation.SuppressLint
 import android.content.pm.ApplicationInfo
+import android.content.pm.PackageManager
 import android.content.pm.PackageManager.MATCH_UNINSTALLED_PACKAGES
 import android.os.Process
 import androidx.databinding.Bindable
@@ -12,7 +13,8 @@ import com.topjohnwu.magisk.arch.Queryable
 import com.topjohnwu.magisk.arch.filterableListOf
 import com.topjohnwu.magisk.arch.itemBindingOf
 import com.topjohnwu.magisk.core.Config
-import com.topjohnwu.magisk.di.AppContext
+import com.topjohnwu.magisk.ktx.get
+import com.topjohnwu.magisk.ktx.packageName
 import com.topjohnwu.magisk.utils.Utils
 import com.topjohnwu.magisk.utils.set
 import com.topjohnwu.superuser.Shell
@@ -59,7 +61,7 @@ class HideViewModel : BaseViewModel(), Queryable {
         }
         state = State.LOADING
         val (apps, diff) = withContext(Dispatchers.Default) {
-            val pm = AppContext.packageManager
+            val pm = get<PackageManager>()
             val hideList = Shell.su("magiskhide ls").exec().out.map { CmdlineHiddenItem(it) }
             val apps = pm.getInstalledApplications(MATCH_UNINSTALLED_PACKAGES)
                 .asSequence()
@@ -111,7 +113,7 @@ class HideViewModel : BaseViewModel(), Queryable {
 
     companion object {
         private val blacklist by lazy { listOf(
-            AppContext.packageName,
+            packageName,
             "com.android.chrome",
             "com.chrome.beta",
             "com.chrome.dev",

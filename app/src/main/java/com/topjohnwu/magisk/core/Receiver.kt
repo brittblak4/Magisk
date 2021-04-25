@@ -4,7 +4,8 @@ import android.annotation.SuppressLint
 import android.content.ContextWrapper
 import android.content.Intent
 import com.topjohnwu.magisk.core.base.BaseReceiver
-import com.topjohnwu.magisk.di.ServiceLocator
+import com.topjohnwu.magisk.core.magiskdb.PolicyDao
+import com.topjohnwu.magisk.ktx.inject
 import com.topjohnwu.magisk.view.Shortcuts
 import com.topjohnwu.superuser.Shell
 import kotlinx.coroutines.GlobalScope
@@ -12,7 +13,7 @@ import kotlinx.coroutines.launch
 
 open class Receiver : BaseReceiver() {
 
-    private val policyDB get() = ServiceLocator.policyDB
+    private val policyDB: PolicyDao by inject()
 
     @SuppressLint("InlinedApi")
     private fun getPkg(intent: Intent): String? {

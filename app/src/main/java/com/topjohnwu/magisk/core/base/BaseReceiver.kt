@@ -5,8 +5,9 @@ import android.content.Context
 import android.content.ContextWrapper
 import android.content.Intent
 import com.topjohnwu.magisk.core.wrap
+import org.koin.core.component.KoinComponent
 
-abstract class BaseReceiver : BroadcastReceiver() {
+abstract class BaseReceiver : BroadcastReceiver(), KoinComponent {
 
     final override fun onReceive(context: Context, intent: Intent?) {
         onReceive(context.wrap() as ContextWrapper, intent)

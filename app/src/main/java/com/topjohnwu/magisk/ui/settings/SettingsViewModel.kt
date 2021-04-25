@@ -1,5 +1,6 @@
 package com.topjohnwu.magisk.ui.settings
 
+import android.content.Context
 import android.os.Build
 import android.view.View
 import android.widget.Toast
@@ -17,11 +18,11 @@ import com.topjohnwu.magisk.core.Info
 import com.topjohnwu.magisk.core.isRunningAsStub
 import com.topjohnwu.magisk.core.tasks.HideAPK
 import com.topjohnwu.magisk.data.database.RepoDao
-import com.topjohnwu.magisk.di.AppContext
 import com.topjohnwu.magisk.events.AddHomeIconEvent
 import com.topjohnwu.magisk.events.RecreateEvent
 import com.topjohnwu.magisk.events.dialog.BiometricEvent
 import com.topjohnwu.magisk.ktx.activity
+import com.topjohnwu.magisk.ktx.get
 import com.topjohnwu.magisk.utils.Utils
 import com.topjohnwu.superuser.Shell
 import kotlinx.coroutines.launch
@@ -41,7 +42,7 @@ class SettingsViewModel(
     }
 
     private fun createItems(): List<BaseSettingsItem> {
-        val context = AppContext
+        val context = get<Context>()
         val hidden = context.packageName != BuildConfig.APPLICATION_ID
 
         // Customization

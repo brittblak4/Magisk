@@ -7,7 +7,7 @@ import android.view.ViewGroup
 import com.topjohnwu.magisk.R
 import com.topjohnwu.magisk.arch.BaseUIFragment
 import com.topjohnwu.magisk.databinding.FragmentSafetynetMd2Binding
-import com.topjohnwu.magisk.di.viewModel
+import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class SafetynetFragment : BaseUIFragment<SafetynetViewModel, FragmentSafetynetMd2Binding>() {
 
