@@ -6,7 +6,7 @@ import com.topjohnwu.magisk.R
 import com.topjohnwu.magisk.arch.BaseViewModel
 import com.topjohnwu.magisk.utils.set
 
-class SafetyNetResult(
+data class SafetyNetResult(
     val response: SafetyNetResponse? = null,
     val dismiss: Boolean = false
 )
@@ -42,43 +42,37 @@ class SafetynetViewModel : BaseViewModel() {
 
     init {
         cachedResult?.also {
-            handleResult(SafetyNetResult(it))
+            handleResponse(SafetyNetResult(it))
         } ?: attest()
     }
 
     private fun attest() {
         isChecking = true
-        CheckSafetyNetEvent(::handleResult).publish()
+        CheckSafetyNetEvent {
+            handleResponse(it)
+        }.publish()
     }
 
     fun reset() = attest()
 
-    private fun handleResult(result: SafetyNetResult) {
+    private fun handleResponse(response: SafetyNetResult) {
         isChecking = false
 
-        if (result.dismiss) {
+        if (response.dismiss) {
             back()
             return
         }
 
-        result.response?.apply {
+        response.response?.apply {
+            val result = ctsProfileMatch && basicIntegrity
             cachedResult = this
-            if (this === INVALID_RESPONSE) {
-                isSuccess = false
-                ctsState = false
-                basicIntegrityState = false
-                evalType = "N/A"
-                safetyNetTitle = R.string.safetynet_res_invalid
-            } else {
-                val success = ctsProfileMatch && basicIntegrity
-                isSuccess = success
-                ctsState = ctsProfileMatch
-                basicIntegrityState = basicIntegrity
-                evalType = if (evaluationType.contains("HARDWARE")) "HARDWARE" else "BASIC"
-                safetyNetTitle =
-                    if (success) R.string.safetynet_attest_success
-                    else R.string.safetynet_attest_failure
-            }
+            ctsState = ctsProfileMatch
+            basicIntegrityState = basicIntegrity
+            evalType = if (evaluationType.contains("HARDWARE")) "HARDWARE" else "BASIC"
+            isSuccess = result
+            safetyNetTitle =
+                if (result) R.string.safetynet_attest_success
+                else R.string.safetynet_attest_failure
         } ?: {
             isSuccess = false
             ctsState = false
